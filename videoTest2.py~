@@ -11,9 +11,9 @@ import socket
 #     times = 0
 #     t=Timer(1,onTime) 
 #     t.start()
-program_stat = 1
+
 server = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-server.bind(("localhost",12345))
+server.bind(("localhost",12346))
 server.listen(1)
 connection, address = server.accept()
 
@@ -60,7 +60,7 @@ cv2.setMouseCallback('Video',onClick)
 # t.start()
 
 
-while isGet and program_stat:
+while isGet:
     # edges = cv2.Canny(frame, 80, 150, apertureSize = 3)
     # times +=1
     try:
@@ -69,7 +69,7 @@ while isGet and program_stat:
         frame_level = frame_int.sum(axis=2)
     
         frame_single[:,:,0] = frame_int[:,:,0] -frame_level * (bili+0.05)
-        frame_single[:,:,1] = frame_int[:,:,1] -frame_level * (bili)
+        frame_single[:,:,1] = frame_int[:,:,1] -frame_level * (bili-0.05)
         frame_single[:,:,2] = frame_int[:,:,2] -frame_level * (bili+0.05)
     
         frame_single = np.clip(frame_single,0,255)
@@ -99,9 +99,6 @@ while isGet and program_stat:
         cv2.imwrite('screenshot.bmp', frame)
         cv2.imwrite('result.bmp',frame_single)
     elif key == ord('q'):
-        print('q')
-        program_stat = 0
-        server.close()
         cv2.destroyAllWindows()
         break
 

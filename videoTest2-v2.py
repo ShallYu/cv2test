@@ -11,7 +11,7 @@ import socket
 #     times = 0
 #     t=Timer(1,onTime) 
 #     t.start()
-program_stat = 1
+
 server = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 server.bind(("localhost",12345))
 server.listen(1)
@@ -60,7 +60,7 @@ cv2.setMouseCallback('Video',onClick)
 # t.start()
 
 
-while isGet and program_stat:
+while isGet:
     # edges = cv2.Canny(frame, 80, 150, apertureSize = 3)
     # times +=1
     try:
@@ -68,15 +68,16 @@ while isGet and program_stat:
         frame_int = np.array(frame,int)+low_level
         frame_level = frame_int.sum(axis=2)
     
-        frame_single[:,:,0] = frame_int[:,:,0] -frame_level * (bili+0.05)
-        frame_single[:,:,1] = frame_int[:,:,1] -frame_level * (bili)
-        frame_single[:,:,2] = frame_int[:,:,2] -frame_level * (bili+0.05)
+        frame_single[:,:,0] = frame_int[:,:,0] -frame_level * (bili+0.16)
+        frame_single[:,:,1] = frame_int[:,:,1] -frame_level * (bili+0.09)
+        frame_single[:,:,2] = frame_int[:,:,2] -frame_level * bili
     
         frame_single = np.clip(frame_single,0,255)
         # frame_single = np.array(frame_single,dtype=np.uint8)
         # frame_single_b = np.clip(frame_single,0,1)
         max_x = frame_single.sum(axis=0).argmax(axis=0)
         max_y = frame_single.sum(axis=1).argmax(axis=0)
+        print(max_y)
         # b_axis=np.array([max_x[0],max_y[0]])
         # g_axis=np.array([max_x[1],max_y[1]])
         # r_axis=np.array([max_x[2],max_y[2]])
@@ -99,9 +100,6 @@ while isGet and program_stat:
         cv2.imwrite('screenshot.bmp', frame)
         cv2.imwrite('result.bmp',frame_single)
     elif key == ord('q'):
-        print('q')
-        program_stat = 0
-        server.close()
         cv2.destroyAllWindows()
         break
 
